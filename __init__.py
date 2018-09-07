@@ -109,6 +109,7 @@ class PairingSkill(MycroftSkill):
             mycroft.audio.wait_while_speaking()
 
             self.speak_dialog("pairing.intro")
+            self.enclosure.bus.emit(Message("metadata", {"type": "pairing", "instructions": "I'm connected to the internet and need to be activated. Open your browser and visit home.mycroft.ai to register this device."}))
 
             self.enclosure.deactivate_mouth_events()
             self.enclosure.mouth_text("home.mycroft.ai      ")
@@ -231,6 +232,7 @@ class PairingSkill(MycroftSkill):
         # Make sure code stays on display
         self.enclosure.deactivate_mouth_events()
         self.enclosure.mouth_text(self.data.get("code"))
+        self.enclosure.bus.emit(Message("metadata", {"type": "pairing", "code": str(self.data.get("code"))}))
         self.speak_dialog("pairing.code", data)
 
     def shutdown(self):
